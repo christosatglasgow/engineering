@@ -18,14 +18,30 @@ knn = KNeighborsClassifier(n_neighbors=10)
 knn.fit(X_train, y_train)
 
 X_in = np.array([[5, 2.9, 1, 0.2]])
-print(X_in.shape)
+#print(X_in.shape)
 y_pred = knn.predict(X_in)
-print(f'This is classifed as: {y_pred}')
+#print(f'This is classifed as: {y_pred}')
 y_pred_label = iris_dataset['target_names'][y_pred]
-print(iris_dataset['target_names'])
+#print(iris_dataset['target_names'])
 
 y_pred = knn.predict(X_test)
-print(iris_dataset['target_names'][y_pred])
+#print(iris_dataset['target_names'][y_pred])
 #print(np.mean(y_pred == y_test))
-print(knn.score(X_test, y_test))
-print(f'Haha!')
+#print(knn.score(X_test, y_test))
+
+training_accuracy = []
+testing_accuracy = []
+neighbors = range(1,51)
+
+for n_neighbors in neighbors:
+    knn = KNeighborsClassifier(n_neighbors=n_neighbors)
+    knn.fit(X_train, y_train)
+    training_accuracy.append(knn.score(X_train, y_train))
+    testing_accuracy.append(knn.score(X_test, y_test))
+
+plt.figure()
+plt.plot(neighbors, training_accuracy,label='Training accuracy')
+plt.plot(neighbors, testing_accuracy,label='Testing accuracy')
+plt.xlabel('Neighbors')
+plt.ylabel('Accuracy')
+plt.legend()
