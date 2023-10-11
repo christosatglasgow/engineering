@@ -3,9 +3,10 @@ import pandas as pd
 import pylab as plt
 from sklearn.linear_model import LinearRegression, Ridge, Lasso
 from sklearn.model_selection import GridSearchCV
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_iris
+from sklearn.metrics import mean_squared_error 
 
 datatxt = np.loadtxt('olympic100m.txt', delimiter=',')
 data = pd.DataFrame(datatxt,columns=['Year','Time'])
@@ -45,3 +46,16 @@ plt.plot(neighbors, testing_accuracy,label='Testing accuracy')
 plt.xlabel('Neighbors')
 plt.ylabel('Accuracy')
 plt.legend()
+
+#knn regression with olypmic data
+X_train, X_test, y_train, y_test = train_test_split(
+    data.Year, data.Time, random_state=0)
+reg = KNeighborsRegressor(n_neighbors=2)
+X_train = np.array([X_train]).T
+X_test = np.array([X_test]).T
+                   
+reg.fit(X_train, y_train)
+y_pred = reg.predict(X_test)
+print(f'R^2 is: {reg.score(X_test,y_test)}')
+mse = mean_squared_error(y_test,y_pred)
+print(f'This is the MSE: {mse}')
